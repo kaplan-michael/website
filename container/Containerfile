@@ -1,0 +1,31 @@
+# Use the official hugo as builder image
+FROM docker.io/eclipsefdn/hugo-node as builder
+
+ARG BASE_URL="localhost"
+
+COPY ../site /site
+WORKDIR /site
+RUN hugo --gc --minify
+
+FROM registry.access.redhat.com/ubi9/ubi:latest
+LABEL maintainer = "Michael Kaplan <michael@kaplan.sh>"
+
+WORKDIR /var/www/html
+RUN dnf copr enable @caddy/caddy epel-9-$(arch) -y
+RUN dnf install caddy -y
+
+#Caddy Config
+COPY ./container/Caddyfile /etc/caddy/Caddyfile
+
+# Copy public folder which is needed for routing and static files
+COPY --from=builder /site/public/ /var/www/html
+
+RUN chown -R caddy:caddy /var/www/html
+
+STOPSIGNAL SIGQUIT
+
+EXPOSE 8080
+EXPOSE 8000
+EXPOSE 9253
+USER caddy
+CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kaplan-web-caddy
+  labels:
+    name: kaplan-web-caddy
+    app: kaplan-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: kaplan-web-caddy
+  template:
+    metadata:
+      labels:
+        name: kaplan-web-caddy
+        app: kaplan-web
+    spec:
+      containers:
+        - name: caddy
+          image: quay.io/kaplan-infra/kaplan-web:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 30
+            terminationGracePeriodSeconds: 60
+
+          ports:
+            - containerPort: 8080
+            - containerPort: 9253
+            - containerPort: 8000
+
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"

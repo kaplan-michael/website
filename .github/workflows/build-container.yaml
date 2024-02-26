@@ -1,0 +1,40 @@
+name: Build Container Image
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  Container:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Build Container Image
+        id: build-image
+        uses: redhat-actions/buildah-build@v2
+        with:
+          layers: true
+          oci: true
+          image: kaplan-web
+          archs: amd64
+          tags: latest
+          build-args: |
+            BASE_URL=${{ env.BASE_URL }}
+          containerfiles: |
+            ./container/Containerfile
+
+      - name: Push Container Image To Registry
+        id: push-to-quay
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: ${{ steps.build-image.outputs.image }}
+          tags: ${{ steps.build-image.outputs.tags }} latest
+          registry: quay.io/kaplan-infra
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}

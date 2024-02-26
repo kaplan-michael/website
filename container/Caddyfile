@@ -1,0 +1,16 @@
+:8080 {
+        root * /var/www/html
+        file_server
+        log {
+                output stdout
+        }
+}
+
+:9253 {
+        metrics /metrics
+}
+
+
+:8000 {
+    respond /healthz 200
+}

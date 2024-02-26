@@ -1,0 +1,34 @@
+languageCode = 'en-us'
+title = 'Michael Kaplan'
+theme = 'nix'
+
+
+[params]
+  Name = "Michael Kaplan"
+  HeaderUsername = "michael"
+  HeaderHostname = "kaplan.sh"
+  About = """
+    Hello! I'm a CyberSecurity enthusiast based in Prague, Czech Republic,
+    with a rich background in product security and incident management.
+    After a fulfilling journey at Red Hat, where I delved into Incident Response and CVE operations,
+    my professional path has taken a new direction towards Kubernetes infrastructure and networking.
+    My interest in these areas is driven by a passion for open-source software and the endless possibilities
+    it presents for creating more efficient and scalable digital environments.
+    Currently, I'm expanding my knowledge and skills in CyberSecurity through further studies at the Open University.
+    When I'm not immersed in the complexities of container orchestration or untangling the webs of network security,
+    you might find me contributing to open-source projects or exploring the latest in tech innovation.
+
+    This website is a space where I share my journey, insights, and experiences in the ever-evolving world of technology.
+    Welcome, and I look forward to connecting with fellow enthusiasts and professionals alike.
+    (BLOG COMING SOON)
+    """
+  ProfilePicture = "https://avatars.githubusercontent.com/u/16418072"
+  Email = "michael@kaplan.sh"
+  GithubID = "kaplan-michael"
+  GnuPGFingerprint = "08D1166D96DE79DD48C7EC166E9802158F94CA24"
+  GoogleAnalyticsTag = "G-C706S31TR2"
+  LinkedInID = "kaplan-michael"
+  Mobile = "+420777050427"
+  TelegramID = "michaelkaplan"
+  SignalID = "test"
+  TwitterID = "majkl_kaplan"
