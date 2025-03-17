@@ -5,6 +5,8 @@ metadata:
   namespace: kaplan-web
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
+    external-dns.alpha.kubernetes.io/hostname: "kaplan.sh, www.kaplan.sh"
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
   labels:
     name: kaplan-web-caddy
     app: kaplan-web
