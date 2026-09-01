@@ -6,4 +6,4 @@ resources:
 images:
 - name: quay.io/kaplan-infra/kaplan-web
   newName: quay.io/kaplan-infra/kaplan-web
-  newTag: 1b0a7f7e1bac
+  newTag: 8784755d3804
