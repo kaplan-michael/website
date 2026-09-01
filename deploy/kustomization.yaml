@@ -2,8 +2,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: kaplan-web
 resources:
-  - ./k8s
+- ./k8s
 images:
-  - name: quay.io/kaplan-infra/kaplan-web
-    newName: quay.io/kaplan-infra/kaplan-web
-    newTag: latest
+- name: quay.io/kaplan-infra/kaplan-web
+  newName: quay.io/kaplan-infra/kaplan-web
+  newTag: 1b0a7f7e1bac
