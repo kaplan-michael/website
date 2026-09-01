@@ -15,7 +15,7 @@ export default defineConfig({
           'telegram',
           'x',
         ],
-        lucide: ['mail', 'phone'],
+        heroicons: ['envelope-solid', 'phone-solid'],
       },
     }),
   ],

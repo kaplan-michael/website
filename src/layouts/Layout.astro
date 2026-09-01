@@ -1,39 +1,25 @@
 ---
-import '../styles/global.css';
+import "../styles/global.css";
 
 interface Props {
-  title: string;
-  description: string;
+    title: string;
+    description: string;
 }
 
 const { title, description } = Astro.props;
-const analyticsId = 'G-C706S31TR2';
 ---
 
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
-    <meta name="theme-color" content="#eef1ed" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <script async src={`https://www.googletagmanager.com/gtag/js?id=${analyticsId}`}></script>
-    <script is:inline define:vars={{ analyticsId }}>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() { dataLayer.push(arguments); }
-      gtag('js', new Date());
-      gtag('config', analyticsId);
-    </script>
-    <title>{title}</title>
-  </head>
-  <body class="min-w-[280px] bg-page font-sans text-ink antialiased">
-    <slot />
-  </body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content={description} />
+        <meta name="theme-color" content="#eef1ed" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <title>{title}</title>
+    </head>
+    <body class="min-w-70 bg-page font-sans text-ink antialiased">
+        <slot />
+    </body>
 </html>
