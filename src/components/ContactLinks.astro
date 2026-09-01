@@ -1,0 +1,83 @@
+---
+import ContactItem from './ContactItem.astro';
+
+interface Contact {
+  label: string;
+  detail: string;
+  href: string;
+  icon: string;
+  iconClass?: string;
+  external?: boolean;
+  title?: string;
+}
+
+const contacts: Contact[] = [
+  {
+    label: 'LinkedIn',
+    detail: 'kaplan-michael',
+    href: 'https://www.linkedin.com/in/kaplan-michael',
+    icon: 'simple-icons:linkedin',
+    iconClass: 'text-[#0a66c2]',
+    external: true,
+  },
+  {
+    label: 'GitHub',
+    detail: 'kaplan-michael',
+    href: 'https://github.com/kaplan-michael',
+    icon: 'simple-icons:github',
+    iconClass: 'text-[#181717]',
+    external: true,
+  },
+  {
+    label: 'Email',
+    detail: 'michael@kaplan.sh',
+    href: 'mailto:michael@kaplan.sh',
+    icon: 'lucide:mail',
+  },
+  {
+    label: 'GPG',
+    detail: 'Public key',
+    href: 'https://keys.openpgp.org/search?q=08D1166D96DE79DD48C7EC166E9802158F94CA24',
+    icon: 'simple-icons:gnuprivacyguard',
+    iconClass: 'text-[#0093dd]',
+    external: true,
+    title: 'OpenPGP key 08D1 166D 96DE 79DD 48C7 EC16 6E98 0215 8F94 CA24',
+  },
+  {
+    label: 'Signal',
+    detail: 'michael_kaplan.24',
+    href: 'https://signal.me/#eu/6L5U01jfo5PHh0phtOEn7lO-G5qGuhPDJFfh4G7ysv5eVvVEQEdKuJo2WdV-lqzw',
+    icon: 'simple-icons:signal',
+    iconClass: 'text-[#3a76f0]',
+    external: true,
+  },
+  {
+    label: 'Telegram',
+    detail: '@michaelkaplan',
+    href: 'https://t.me/michaelkaplan',
+    icon: 'simple-icons:telegram',
+    iconClass: 'text-[#26a5e4]',
+    external: true,
+  },
+  {
+    label: 'X',
+    detail: '@majkl_kaplan',
+    href: 'https://x.com/majkl_kaplan',
+    icon: 'simple-icons:x',
+    iconClass: 'text-black',
+    external: true,
+  },
+  {
+    label: 'Phone',
+    detail: '+420 777 050 427',
+    href: 'tel:+420777050427',
+    icon: 'lucide:phone',
+  },
+];
+---
+
+<nav aria-label="Contact links">
+  <ul class="grid list-none grid-cols-1 gap-3 p-0 min-[420px]:grid-cols-2 lg:grid-cols-4">
+    {contacts.map((contact) => <li><ContactItem {...contact} /></li>)}
+  </ul>
+</nav>

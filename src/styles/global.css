@@ -1,0 +1,8 @@
+@import 'tailwindcss';
+@config '../../tailwind.config.mjs';
+
+@theme {
+  --color-ink: #202421;
+  --color-page: #eef1ed;
+  --font-sans: 'Inter', sans-serif;
+}

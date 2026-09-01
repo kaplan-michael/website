@@ -4,37 +4,79 @@ on:
   push:
     branches:
       - master
+    paths-ignore:
+      - "**/*.md"
+      - deploy/kustomization.yaml
+      - deploy/k8s/**
   workflow_dispatch:
 
+permissions:
+  contents: write
+
+concurrency:
+  group: kaplan-web-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  IMAGE_NAME: kaplan-web
+  IMAGE_REGISTRY: quay.io/kaplan-infra
+
 jobs:
-  Container:
-    runs-on: ubuntu-22.04
+  build:
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out source
+        uses: actions/checkout@v6
         with:
-          submodules: true
           fetch-depth: 0
+
+      - name: Define immutable image tag
+        id: image
+        shell: bash
+        run: echo "tag=${GITHUB_SHA::12}" >> "$GITHUB_OUTPUT"
 
       - name: Build Container Image
         id: build-image
-        uses: redhat-actions/buildah-build@v2
+        uses: redhat-actions/buildah-build@v3
         with:
           layers: true
           oci: true
-          image: kaplan-web
+          image: ${{ env.IMAGE_NAME }}
           archs: amd64
-          tags: latest
-          build-args: |
-            BASE_URL=${{ env.BASE_URL }}
+          tags: |
+            latest
+            ${{ steps.image.outputs.tag }}
           containerfiles: |
-            ./container/Containerfile
+            ./deploy/Containerfile
 
       - name: Push Container Image To Registry
         id: push-to-quay
-        uses: redhat-actions/push-to-registry@v2
+        uses: redhat-actions/push-to-registry@v3
         with:
           image: ${{ steps.build-image.outputs.image }}
-          tags: ${{ steps.build-image.outputs.tags }} latest
-          registry: quay.io/kaplan-infra
+          tags: ${{ steps.build-image.outputs.tags }}
+          registry: ${{ env.IMAGE_REGISTRY }}
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Publish image tag for Argo CD
+        env:
+          IMAGE_TAG: ${{ steps.image.outputs.tag }}
+        shell: bash
+        run: |
+          (
+            cd deploy
+            kustomize edit set image \
+              "${IMAGE_REGISTRY}/${IMAGE_NAME}=${IMAGE_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
+          )
+          git diff --check
+          if git diff --quiet -- deploy/kustomization.yaml; then
+            echo "Deployment already references ${IMAGE_TAG}"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add deploy/kustomization.yaml
+          git commit -m "chore(deploy): use ${IMAGE_TAG} [skip ci]"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

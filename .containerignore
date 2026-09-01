@@ -1,0 +1,6 @@
+.git/
+.astro/
+.idea/
+agi-web/
+dist/
+node_modules/

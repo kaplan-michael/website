@@ -1,0 +1,28 @@
+FROM docker.io/library/node:22-alpine AS builder
+
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY astro.config.mjs postcss.config.mjs tailwind.config.mjs tsconfig.json ./
+COPY public ./public
+COPY src ./src
+RUN npm run build
+
+FROM registry.access.redhat.com/ubi9/ubi:latest
+LABEL maintainer="Michael Kaplan <michael@kaplan.sh>"
+
+WORKDIR /var/www/html
+RUN dnf copr enable @caddy/caddy epel-9-$(arch) -y && \
+    dnf install caddy -y && \
+    dnf clean all
+
+COPY ./deploy/Caddyfile /etc/caddy/Caddyfile
+COPY --from=builder /app/dist/ /var/www/html
+
+RUN chown -R caddy:caddy /var/www/html
+
+STOPSIGNAL SIGQUIT
+
+EXPOSE 8080 8000 9253
+USER caddy
+CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
