@@ -3,6 +3,7 @@ import icon from 'astro-icon';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
+  site: 'https://kaplan.sh',
   output: 'static',
   integrations: [
     icon({

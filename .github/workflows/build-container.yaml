@@ -1,13 +1,6 @@
 name: Build Container Image
 
 on:
-  push:
-    branches:
-      - master
-    paths-ignore:
-      - "**/*.md"
-      - deploy/kustomization.yaml
-      - deploy/k8s/**
   workflow_dispatch:
 
 permissions:
